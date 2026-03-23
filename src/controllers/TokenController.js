@@ -178,15 +178,17 @@ class TokenController {
         const candidateKeys = await this.keyService.getCandidateKeys(tenant, purpose);
         // Do not validate audience or exp during revocation
         try {
-           const claims = this.tokenService.verify(token, candidateKeys, {}, { ignoreExpiration: true });
+           const claims = this.tokenService.verify(token, candidateKeys, { ignoreExpiration: true });
            jti = claims.jti;
         } catch (e) {
-           jti = null;
+           throw new TokenInvalidError(`Could not decode token to find JTI for revocation: ${e.message}`);
         }
       }
 
+      if (!jti) throw new ValidationError('Must provide jti or valid token');
+
       if (jti) {
-        await this.revocationService.revoke(jti, tenant, Math.floor(Date.now()/1000) + 86400); // Default to 24h block list
+        await this.revocationService.revoke(jti, tenant, Date.now() + 86400 * 1000); // Default to 24h block list
         await this.auditService.log('token.revoked', { tenant, jti, method: 'jti' });
       }
 

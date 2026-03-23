@@ -37,6 +37,7 @@ function adminAuth(config) {
 
     if (providedBuf.length === validBuf.length && crypto.timingSafeEqual(providedBuf, validBuf)) {
       req.isAdmin = true;
+      req.tenant = req.query.tenant || (req.body && req.body.tenant) || 'system';
       return next();
     }
 

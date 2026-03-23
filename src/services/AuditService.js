@@ -54,11 +54,6 @@ class AuditService {
       const pipeline = this.redis.pipeline();
       pipeline.zadd(`${this.config.redis.prefix}audit:${tenant}`, ts, JSON.stringify(entry));
       pipeline.hincrby(`${this.config.redis.prefix}stats:${tenant}`, event, 1);
-      
-      // ZREMRANGEBYRANK removes elements with lower scores (older elements)
-      // So to keep maxEntries, we remove 0 to -(maxEntries + 1) index
-      pipeline.zremrangebyrank(`${this.config.redis.prefix}audit:${tenant}`, 0, -(this.maxEntries + 1));
-      
       await pipeline.exec();
     } catch (err) {
       logger.error({ err, event }, 'Failed to persist audit log to Redis');
@@ -78,14 +73,13 @@ class AuditService {
         limit = 50,
       } = filters;
 
-      // ZREVRANGEBYSCORE gives newest first
-      // Redis max score +inf, min score is `since`
-      const results = await this.redis.zrevrangebyscore(
-        `${this.config.redis.prefix}audit:${tenant}`,
-        '+inf',
-        since
+      const keyToSearch = `${this.config.redis.prefix}audit:${tenant}`;
+      const results = await this.redis.zrevrange(
+        keyToSearch,
+        0,
+        -1
       );
-
+      console.log('Query called with tenant:', tenant, 'Key:', keyToSearch, 'Results:', results);
       let entries = results.map((r) => JSON.parse(r));
 
       // In-memory filters
