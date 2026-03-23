@@ -1,0 +1,71 @@
+{
+  "name": "vaulttoken",
+  "version": "1.0.0",
+  "description": "Secure-by-default PASETO v4 token server",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand --forceExit",
+    "test:unit": "jest tests/unit --runInBand",
+    "test:integration": "jest tests/integration --runInBand",
+    "test:e2e": "jest tests/e2e --runInBand",
+    "test:coverage": "jest --coverage --runInBand --forceExit",
+    "keygen": "node scripts/keygen.js",
+    "rotate": "node scripts/rotate.js",
+    "revoke": "node scripts/revoke.js",
+    "keys:list": "node scripts/keys-list.js",
+    "audit:tail": "node scripts/audit-tail.js",
+    "lint": "eslint src tests scripts",
+    "format": "prettier --write \"src/**/*.js\" \"tests/**/*.js\""
+  },
+  "dependencies": {
+    "@noble/ciphers": "^0.5.3",
+    "@noble/curves": "^2.0.1",
+    "@noble/ed25519": "^2.3.0",
+    "@noble/hashes": "^1.8.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "ioredis": "^5.10.1",
+    "pino": "^8.21.0",
+    "pino-http": "^9.0.0",
+    "pino-pretty": "^11.3.0",
+    "ulid": "^2.4.0",
+    "yargs": "^17.7.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "babel-jest": "^30.3.0",
+    "eslint": "^8.57.1",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.1",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 15000,
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!@noble/)"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT",
+  "directories": {
+    "doc": "docs"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs"
+}
