@@ -6,40 +6,40 @@ Work through these tasks in order. Each phase builds on the previous.
 
 ## Phase 1 — Project Setup
 
-- [ ] `npm init -y`
-- [ ] Install all dependencies (see README.md → Core Dependencies)
-- [ ] Create folder structure: `src/config`, `src/services`, `src/controllers`, `src/middleware`, `src/routes`, `src/utils`, `src/validators`, `tests/unit`, `tests/integration`, `tests/e2e`, `scripts`
-- [ ] Create `.env` from `.env.example` — fill in `KEY_ENCRYPTION_SECRET` and `API_KEYS`
-- [ ] Add `jest`, `eslint`, `prettier` config to `package.json`
-- [ ] Add all npm scripts to `package.json` (see SETUP.md → Project Scripts)
-- [ ] Set up `nodemon` for development
+- [x] `npm init -y`
+- [x] Install all dependencies (see README.md → Core Dependencies)
+- [x] Create folder structure: `src/config`, `src/services`, `src/controllers`, `src/middleware`, `src/routes`, `src/utils`, `src/validators`, `tests/unit`, `tests/integration`, `tests/e2e`, `scripts`
+- [x] Create `.env` from `.env.example` — fill in `KEY_ENCRYPTION_SECRET` and `API_KEYS`
+- [x] Add `jest`, `eslint`, `prettier` config to `package.json`
+- [x] Add all npm scripts to `package.json` (see SETUP.md → Project Scripts)
+- [x] Set up `nodemon` for development
 
 ---
 
 ## Phase 2 — Config & Utilities
 
 ### `src/config/index.js`
-- [ ] Define Zod schema for all env variables
-- [ ] Call `safeParse(process.env)` — exit process on failure with clear error messages
-- [ ] Parse `API_KEYS` string into `Map<apiKey, tenantId>`
-- [ ] Convert `KEY_ENCRYPTION_SECRET` hex string to 32-byte Buffer
-- [ ] Export a single typed `config` object
+- [x] Define Zod schema for all env variables
+- [x] Call `safeParse(process.env)` — exit process on failure with clear error messages
+- [x] Parse `API_KEYS` string into `Map<apiKey, tenantId>`
+- [x] Convert `KEY_ENCRYPTION_SECRET` hex string to 32-byte Buffer
+- [x] Export a single typed `config` object
 
 ### `src/utils/errors.js`
-- [ ] Create base `VaultTokenError` class extending `Error` with `code`, `statusCode`, `details`
-- [ ] Create subclasses for each error type listed in API.md → Error Reference
-- [ ] All subclasses must call `Error.captureStackTrace`
+- [x] Create base `VaultTokenError` class extending `Error` with `code`, `statusCode`, `details`
+- [x] Create subclasses for each error type listed in API.md → Error Reference
+- [x] All subclasses must call `Error.captureStackTrace`
 
 ### `src/utils/pae.js`
-- [ ] Implement `le64(n)` — encode number as 8-byte little-endian Buffer
-- [ ] Implement `pae(...pieces)` — length-prefix encode each piece, concat with count prefix
-- [ ] Accept Buffer, Uint8Array, or string inputs — throw TypeError for anything else
-- [ ] Write unit tests first (see tests/unit/pae.test.js) — use spec test vectors
+- [x] Implement `le64(n)` — encode number as 8-byte little-endian Buffer
+- [x] Implement `pae(...pieces)` — length-prefix encode each piece, concat with count prefix
+- [x] Accept Buffer, Uint8Array, or string inputs — throw TypeError for anything else
+- [x] Write unit tests first (see tests/unit/pae.test.js) — use spec test vectors
 
 ### `src/utils/logger.js`
-- [ ] Create Pino logger with `LOG_LEVEL` and `LOG_FORMAT` from config
-- [ ] Add redact paths for API keys, secrets, key material
-- [ ] Export singleton logger
+- [x] Create Pino logger with `LOG_LEVEL` and `LOG_FORMAT` from config
+- [x] Add redact paths for API keys, secrets, key material
+- [x] Export singleton logger
 
 ---
 
@@ -50,33 +50,33 @@ Work through these tasks in order. Each phase builds on the previous.
 **Constructor:** takes `(redis, config)`
 
 **Key ID generation:**
-- [ ] `_makeKeyId(purpose)` — format: `key-v4{l|p}-{ULID}`
+- [x] `_makeKeyId(purpose)` — format: `key-v4{l|p}-{ULID}`
 
 **Encryption at rest:**
-- [ ] `_encryptMaterial(rawBytes)` — AES-256-GCM with random 12-byte IV, return `base64(iv || tag || ciphertext)`
-- [ ] `_decryptMaterial(stored)` — reverse the above, throw `KeyDecryptionError` on auth tag failure
+- [x] `_encryptMaterial(rawBytes)` — AES-256-GCM with random 12-byte IV, return `base64(iv || tag || ciphertext)`
+- [x] `_decryptMaterial(stored)` — reverse the above, throw `KeyDecryptionError` on auth tag failure
 
 **Generation:**
-- [ ] `generateLocalKey({ tenant })` — `crypto.randomBytes(32)`, encrypt, write to Redis active slot, return `{ id, tenant, createdAt }`
-- [ ] `generatePublicKey({ tenant })` — Ed25519 keypair via `@noble/ed25519`, encrypt secret key, write secret + public records, return `{ id, publicKey, tenant, createdAt }`
+- [x] `generateLocalKey({ tenant })` — `crypto.randomBytes(32)`, encrypt, write to Redis active slot, return `{ id, tenant, createdAt }`
+- [x] `generatePublicKey({ tenant })` — Ed25519 keypair via `@noble/ed25519`, encrypt secret key, write secret + public records, return `{ id, publicKey, tenant, createdAt }`
 
 **Retrieval:**
-- [ ] `getActiveKey(tenant, purpose)` — GET from Redis, decrypt, return `{ id, purpose, rawKey, publicKey? }`
-- [ ] `getCandidateKeys(tenant, purpose)` — active key + all non-expired retired keys (scan by pattern)
-- [ ] `getKeyById(tenant, purpose, keyId)` — check active first, then retired
+- [x] `getActiveKey(tenant, purpose)` — GET from Redis, decrypt, return `{ id, purpose, rawKey, publicKey? }`
+- [x] `getCandidateKeys(tenant, purpose)` — active key + all non-expired retired keys (scan by pattern)
+- [x] `getKeyById(tenant, purpose, keyId)` — check active first, then retired
 
 **Rotation:**
-- [ ] `rotateKey(tenant, purpose, gracePeriod)` — retire current active (with TTL), generate new active, return `{ newKeyId, retiredKeyId, gracePeriodEndsAt }`
-- [ ] `_retireExistingActive(tenant, purpose)` — internal: move active → retired with Redis EXPIRE
-- [ ] `_storeRetiredKey(tenant, purpose, record, gracePeriod)` — internal: SET + EXPIRE
+- [x] `rotateKey(tenant, purpose, gracePeriod)` — retire current active (with TTL), generate new active, return `{ newKeyId, retiredKeyId, gracePeriodEndsAt }`
+- [x] `_retireExistingActive(tenant, purpose)` — internal: move active → retired with Redis EXPIRE
+- [x] `_storeRetiredKey(tenant, purpose, record, gracePeriod)` — internal: SET + EXPIRE
 
 **Public keys:**
-- [ ] `getPublicKeys(tenant)` — return JWKS-style array (kty, crv, use, alg, x, kid)
-- [ ] `listKeys(tenant)` — return `{ active: [...], retired: [...] }` with no key material
+- [x] `getPublicKeys(tenant)` — return JWKS-style array (kty, crv, use, alg, x, kid)
+- [x] `listKeys(tenant)` — return `{ active: [...], retired: [...] }` with no key material
 
 **Emergency:**
-- [ ] `emergencyRevokeKey(tenant, purpose, keyId)` — delete from active + retired, SADD to blocked set
-- [ ] `isKeyBlocked(keyId)` — SISMEMBER on blocked set
+- [x] `emergencyRevokeKey(tenant, purpose, keyId)` — delete from active + retired, SADD to blocked set
+- [x] `isKeyBlocked(keyId)` — SISMEMBER on blocked set
 
 ---
 
@@ -85,16 +85,16 @@ Work through these tasks in order. Each phase builds on the previous.
 **Constructor:** takes `(config)`
 
 **Claims:**
-- [ ] `buildClaims(body, options)` — assemble `{ iss, sub, aud, iat, nbf, exp, jti, typ, fid?, ...customClaims }`
+- [x] `buildClaims(body, options)` — assemble `{ iss, sub, aud, iat, nbf, exp, jti, typ, fid?, ...customClaims }`
   - `jti` = ULID
   - `exp` = `now + ttl`
   - `typ` = `"access"` or `"refresh"` based on `options.isRefresh`
   - `fid` = `options.familyId` if provided
 
-- [ ] `validateClaims(claims, options)` — check `exp` (throw `TokenExpiredError`), `nbf` (throw `TokenNotYetValidError`), `iss` (throw `IssuerMismatchError`), `aud` (throw `AudienceMismatchError`)
+- [x] `validateClaims(claims, options)` — check `exp` (throw `TokenExpiredError`), `nbf` (throw `TokenNotYetValidError`), `iss` (throw `IssuerMismatchError`), `aud` (throw `AudienceMismatchError`)
 
 **v4.local:**
-- [ ] `encryptLocal(claims, key, options)`:
+- [x] `encryptLocal(claims, key, options)`:
   1. Serialize claims to JSON Buffer
   2. Generate 24-byte random nonce
   3. Serialize footer to Buffer
@@ -103,7 +103,7 @@ Work through these tasks in order. Each phase builds on the previous.
   6. `ciphertext = XChaCha20Poly1305(key, nonce, aad).encrypt(message)`
   7. Return `"v4.local." + base64url(nonce || ciphertext) + "." + base64url(footer)`
 
-- [ ] `decryptLocal(token, key|keys, options)`:
+- [x] `decryptLocal(token, key|keys, options)`:
   1. Check token starts with `"v4.local."` — else throw `TokenInvalidError`
   2. Split on `.` — extract payload (index 2) and footer (index 3)
   3. Decode payload → split nonce (first 24 bytes) and ciphertext (rest)
@@ -114,13 +114,13 @@ Work through these tasks in order. Each phase builds on the previous.
   8. Call `validateClaims`
 
 **v4.public:**
-- [ ] `signPublic(claims, secretKey, options)`:
+- [x] `signPublic(claims, secretKey, options)`:
   1. Serialize claims to JSON Buffer (= `m`)
   2. `m2 = PAE("v4.public.", m, footerBuf, assertionBuf)`
   3. `sig = Ed25519.sign(m2, secretKey)` — 64 bytes
   4. Return `"v4.public." + base64url(m || sig) + "." + base64url(footer)`
 
-- [ ] `verifyPublic(token, publicKey|keys, options)`:
+- [x] `verifyPublic(token, publicKey|keys, options)`:
   1. Check prefix `"v4.public."`
   2. Decode payload → split message (all bytes except last 64) and signature (last 64)
   3. Build same PAE `m2`
@@ -130,10 +130,10 @@ Work through these tasks in order. Each phase builds on the previous.
   7. Call `validateClaims`
 
 **Helpers:**
-- [ ] `issue(claims, keyRecord, options)` — dispatch to local or public based on `keyRecord.purpose`
-- [ ] `verify(token, candidateKeys, options)` — dispatch based on token prefix
-- [ ] `detectPurpose(token)` — return `"local"`, `"public"`, or `null`
-- [ ] `parseFooter(token)` — base64url decode part[3], try JSON parse
+- [x] `issue(claims, keyRecord, options)` — dispatch to local or public based on `keyRecord.purpose`
+- [x] `verify(token, candidateKeys, options)` — dispatch based on token prefix
+- [x] `detectPurpose(token)` — return `"local"`, `"public"`, or `null`
+- [x] `parseFooter(token)` — base64url decode part[3], try JSON parse
 
 ---
 
@@ -142,23 +142,23 @@ Work through these tasks in order. Each phase builds on the previous.
 **Constructor:** takes `(redis, config)`
 
 **JTI blocklist:**
-- [ ] `revoke(jti, tenant, expiresAt, meta)` — `ZADD revoked:{tenant} {exp} {jti}`, optionally track by subject, call `_cleanupExpired`
-- [ ] `isRevoked(jti, tenant)` — `ZSCORE revoked:{tenant} {jti}` — non-null = revoked
-- [ ] `revokeBySubject(sub, tenant)` — add sentinel entry to revoked set and subject index
-- [ ] `revokeByKey(keyId, tenant)` — `SADD revoked:key:{tenant} {keyId}`
-- [ ] `isKeyRevoked(keyId, tenant)` — `SISMEMBER revoked:key:{tenant} {keyId}`
-- [ ] `_cleanupExpired(tenant)` — `ZREMRANGEBYSCORE revoked:{tenant} -inf {now-1}`
+- [x] `revoke(jti, tenant, expiresAt, meta)` — `ZADD revoked:{tenant} {exp} {jti}`, optionally track by subject, call `_cleanupExpired`
+- [x] `isRevoked(jti, tenant)` — `ZSCORE revoked:{tenant} {jti}` — non-null = revoked
+- [x] `revokeBySubject(sub, tenant)` — add sentinel entry to revoked set and subject index
+- [x] `revokeByKey(keyId, tenant)` — `SADD revoked:key:{tenant} {keyId}`
+- [x] `isKeyRevoked(keyId, tenant)` — `SISMEMBER revoked:key:{tenant} {keyId}`
+- [x] `_cleanupExpired(tenant)` — `ZREMRANGEBYSCORE revoked:{tenant} -inf {now-1}`
 
 **Token families:**
-- [ ] `createFamily(tenant)` — generate `fam_{ULID}`, write JSON record with TTL 30 days
-- [ ] `registerRefreshToken(familyId, jti, tenant)` — set `currentRefreshJti = jti` in family record
-- [ ] `consumeRefreshToken(familyId, jti, tenant)`:
+- [x] `createFamily(tenant)` — generate `fam_{ULID}`, write JSON record with TTL 30 days
+- [x] `registerRefreshToken(familyId, jti, tenant)` — set `currentRefreshJti = jti` in family record
+- [x] `consumeRefreshToken(familyId, jti, tenant)`:
   - Family missing → `{ valid: false, reuseDetected: false }`
   - `record.revokedAt` set → `{ valid: false, reuseDetected: true }`
   - `jti !== currentRefreshJti` → set `revokedAt`, return `{ valid: false, reuseDetected: true }`
   - `jti === currentRefreshJti` → clear `currentRefreshJti`, return `{ valid: true, reuseDetected: false }`
-- [ ] `isFamilyRevoked(familyId, tenant)` — check `record.revokedAt`
-- [ ] `revokeFamily(familyId, tenant)` — set `revokedAt` on family record
+- [x] `isFamilyRevoked(familyId, tenant)` — check `record.revokedAt`
+- [x] `revokeFamily(familyId, tenant)` — set `revokedAt` on family record
 
 ---
 
@@ -166,21 +166,21 @@ Work through these tasks in order. Each phase builds on the previous.
 
 **Constructor:** takes `(redis, config)`
 
-- [ ] Define event constants: `token.issued`, `token.verified`, `token.verify_failed`, `token.revoked`, `token.refreshed`, `refresh.reuse_detected`, `key.generated`, `key.rotated`, `key.retired`, `key.emergency_revoked`
-- [ ] `log(event, data)` — remove sensitive fields, emit to Pino logger, `ZADD audit:{tenant} {Date.now()} {JSON}`, `HINCRBY stats:{tenant} {event} 1`, trim to max entries
-- [ ] `query(filters)` — `ZRANGEBYSCORE` with time range, filter by event/sub in memory, reverse sort, limit
-- [ ] `getStats(tenant)` — `HGETALL stats:{tenant}`, parse to numbers, include `ZCARD revoked:{tenant}`
+- [x] Define event constants: `token.issued`, `token.verified`, `token.verify_failed`, `token.revoked`, `token.refreshed`, `refresh.reuse_detected`, `key.generated`, `key.rotated`, `key.retired`, `key.emergency_revoked`
+- [x] `log(event, data)` — remove sensitive fields, emit to Pino logger, `ZADD audit:{tenant} {Date.now()} {JSON}`, `HINCRBY stats:{tenant} {event} 1`, trim to max entries
+- [x] `query(filters)` — `ZRANGEBYSCORE` with time range, filter by event/sub in memory, reverse sort, limit
+- [x] `getStats(tenant)` — `HGETALL stats:{tenant}`, parse to numbers, include `ZCARD revoked:{tenant}`
 
 ---
 
 ## Phase 4 — Middleware
 
 ### `src/middleware/auth.js`
-- [ ] `auth(config)` — extract `X-Api-Key`, iterate `config.auth.apiKeys` with `crypto.timingSafeEqual`, set `req.tenant`, call `next(new UnauthorizedError)` on failure
-- [ ] `adminAuth(config)` — extract `X-Admin-Key`, timing-safe compare against `config.auth.adminApiKey`
+- [x] `auth(config)` — extract `X-Api-Key`, iterate `config.auth.apiKeys` with `crypto.timingSafeEqual`, set `req.tenant`, call `next(new UnauthorizedError)` on failure
+- [x] `adminAuth(config)` — extract `X-Admin-Key`, timing-safe compare against `config.auth.adminApiKey`
 
 ### `src/middleware/rateLimiter.js`
-- [ ] `rateLimiter(redis, { limit, windowSeconds, prefix, endpoint })`:
+- [x] `rateLimiter(redis, { limit, windowSeconds, prefix, endpoint })`:
   1. Key = `{prefix}ratelimit:{endpoint}:{req.tenant ?? req.ip}`
   2. Pipeline: ZREMRANGEBYSCORE (remove old), ZCARD (count), ZADD (add current), EXPIRE
   3. Set `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` headers
@@ -188,12 +188,12 @@ Work through these tasks in order. Each phase builds on the previous.
   5. On Redis failure → fail open (call `next()`)
 
 ### `src/middleware/errorHandler.js`
-- [ ] Map `VaultTokenError` → `res.status(err.statusCode).json({ error: err.code, message: err.message, ...err.details })`
-- [ ] Map `ZodError` → `400 VALIDATION_ERROR` with field-level details
-- [ ] Unknown errors → `500 INTERNAL_ERROR` (never leak stack trace)
+- [x] Map `VaultTokenError` → `res.status(err.statusCode).json({ error: err.code, message: err.message, ...err.details })`
+- [x] Map `ZodError` → `400 VALIDATION_ERROR` with field-level details
+- [x] Unknown errors → `500 INTERNAL_ERROR` (never leak stack trace)
 
 ### `src/middleware/securityHeaders.js`
-- [ ] Set all headers listed in SECURITY.md → Security Headers on every response
+- [x] Set all headers listed in SECURITY.md → Security Headers on every response
 
 ---
 
