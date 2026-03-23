@@ -18,8 +18,6 @@ describe('Admin API Integration Tests', () => {
     // Seed some audit logs
     await auditService.log('token.issued', { tenant: 'tenantA', subject: 'user1' });
     await auditService.log('token.verified', { tenant: 'tenantA', subject: 'user1' });
-    console.log('Keys inside mock redis:', await redis.keys('*'));
-    console.log('ZRange result:', await redis.zrange(`${config.redis.prefix}audit:tenantA`, 0, -1));
   });
 
   afterAll(async () => {
@@ -32,7 +30,6 @@ describe('Admin API Integration Tests', () => {
         .get('/admin/audit?tenant=tenantA')
         .set('x-admin-key', 'super-secret-admin');
       
-      console.log('GET /admin/audit response:', res.body);
       expect(res.status).toBe(200);
       expect(res.body.entries).toBeDefined();
       expect(res.body.entries.length).toBeGreaterThanOrEqual(2);

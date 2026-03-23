@@ -79,7 +79,6 @@ class AuditService {
         0,
         -1
       );
-      console.log('Query called with tenant:', tenant, 'Key:', keyToSearch, 'Results:', results);
       let entries = results.map((r) => JSON.parse(r));
 
       // In-memory filters
