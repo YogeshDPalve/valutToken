@@ -317,10 +317,11 @@ Each method takes `(req, res, next)`:
   - getCandidateKeys returns active + retired
   - getPublicKeys returns JWKS-style keys
 
-### Integration tests (`tests/integration/`)
-
-- [ ] POST /tokens/issue — success, missing sub, missing aud, bad API key, TTL respected
-- [ ] POST /tokens/verify — valid, tampered, wrong aud, revoked, wrong assertion, correct assertion
+### Phase 8: Integration & E2E Tests (Pending)
+- [x] Write integration tests for API endpoints (`/tokens`, `/keys`, `/admin`)
+- [x] Setup mocking for Redis (ioredis-mock)
+- [x] Write E2E flow tests (Simulate full lifecycle: issue -> verify -> refresh -> rotate -> revoke)
+- [x] Fix mock-related bugs in services (tenant validation, date/time limits, zscore vs zrange mock disparities)
 - [ ] POST /tokens/refresh — success, reuse detection, non-refresh token rejected
 - [ ] POST /tokens/revoke — by JTI, by token, missing both → 400
 - [ ] POST /tokens/introspect — active, invalid, revoked → always 200

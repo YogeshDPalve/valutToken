@@ -15,7 +15,7 @@ class AdminController {
         since: req.query.since ? parseInt(req.query.since, 10) : undefined
       };
       
-      const logs = await this.auditService.query(filters);
+      const logs = await this.auditService.query(req.tenant, filters);
       res.status(200).json(logs);
     } catch (err) {
       next(err);

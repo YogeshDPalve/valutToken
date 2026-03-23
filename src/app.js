@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { v4: uuidv4 } = require('uuid');
+const { ulid } = require('ulid');
 const config = require('./config');
 const logger = require('./utils/logger');
 const securityHeaders = require('./middleware/securityHeaders');
@@ -47,7 +47,7 @@ function createApp(redisClient) {
 
   // 4. Correlation ID & Logger
   app.use((req, res, next) => {
-    req.id = uuidv4();
+    req.id = ulid();
     res.setHeader('X-Request-Id', req.id);
     next();
   });
