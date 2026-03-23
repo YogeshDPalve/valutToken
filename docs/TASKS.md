@@ -203,25 +203,25 @@ Work through these tasks in order. Each phase builds on the previous.
 
 Each method takes `(req, res, next)`:
 
-- [ ] `issue` — validate body → getActiveKey → buildClaims → issue token → (optionally issue refresh + create family) → log audit → 201
-- [ ] `verify` — detectPurpose → getCandidateKeys → verify token → validateClaims → isRevoked → isKeyRevoked → log audit → 200
-- [ ] `refresh` — verify refresh token → check `typ === "refresh"` → consumeRefreshToken → detect reuse → revoke old JTI → issue new pair → registerRefreshToken → log audit → 200
-- [ ] `revoke` — extract JTI (from body or by decrypting token) → revoke → log audit → 200
-- [ ] `introspect` — try verify → isRevoked → return `{ active }` (never throw — always 200)
+- [x] `issue` — validate body → getActiveKey → buildClaims → issue token → (optionally issue refresh + create family) → log audit → 201
+- [x] `verify` — detectPurpose → getCandidateKeys → verify token → validateClaims → isRevoked → isKeyRevoked → log audit → 200
+- [x] `refresh` — verify refresh token → check `typ === "refresh"` → consumeRefreshToken → detect reuse → revoke old JTI → issue new pair → registerRefreshToken → log audit → 200
+- [x] `revoke` — extract JTI (from body or by decrypting token) → revoke → log audit → 200
+- [x] `introspect` — try verify → isRevoked → return `{ active }` (never throw — always 200)
 
 ### `src/controllers/KeyController.js`
 
-- [ ] `getPublicKeys` — getPublicKeys(tenant) → 200
-- [ ] `rotate` — rotateKey → log audit → 200
-- [ ] `list` — listKeys(tenant) → 200
-- [ ] `emergencyRevoke` — emergencyRevokeKey → log audit → 200
+- [x] `getPublicKeys` — getPublicKeys(tenant) → 200
+- [x] `rotate` — rotateKey → log audit → 200
+- [x] `list` — listKeys(tenant) → 200
+- [x] `emergencyRevoke` — emergencyRevokeKey → log audit → 200
 
 ### `src/controllers/AdminController.js`
 
-- [ ] `getAuditLog` — query(filters from req.query) → 200
-- [ ] `getStats` — getStats(tenant) + listKeys → 200
-- [ ] `revokeBySubject` — revokeBySubject → 200
-- [ ] `revokeFamily` — revokeFamily → 200
+- [x] `getAuditLog` — query(filters from req.query) → 200
+- [x] `getStats` — getStats(tenant) + listKeys → 200
+- [x] `revokeBySubject` — revokeBySubject → 200
+- [x] `revokeFamily` — revokeFamily → 200
 
 ---
 
