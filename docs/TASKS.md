@@ -228,25 +228,25 @@ Each method takes `(req, res, next)`:
 ## Phase 6 — Routes & App
 
 ### `src/validators/schemas.js`
-- [ ] Define Zod schemas for each endpoint body: `issueSchema`, `verifySchema`, `refreshSchema`, `revokeSchema`, `introspectSchema`, `rotateSchema`
-- [ ] Create `validate(schema)` middleware factory that calls `schema.safeParse(req.body)` and calls `next(err)` on failure
+- [x] Define Zod schemas for each endpoint body: `issueSchema`, `verifySchema`, `refreshSchema`, `revokeSchema`, `introspectSchema`, `rotateSchema`
+- [x] Create `validate(schema)` middleware factory that calls `schema.safeParse(req.body)` and calls `next(err)` on failure
 
 ### `src/routes/`
-- [ ] `tokens.js` — POST /issue, /verify, /refresh, /revoke, /introspect — each with rate limiter + validate middleware
-- [ ] `keys.js` — GET / (no auth), POST /rotate + GET /all + POST /emergency-revoke (adminAuth)
-- [ ] `admin.js` — GET /audit, GET /stats, POST /revoke/subject, POST /revoke/family
+- [x] `tokens.js` — POST /issue, /verify, /refresh, /revoke, /introspect — each with rate limiter + validate middleware
+- [x] `keys.js` — GET / (no auth), POST /rotate + GET /all + POST /emergency-revoke (adminAuth)
+- [x] `admin.js` — GET /audit, GET /stats, POST /revoke/subject, POST /revoke/family
 
 ### `src/app.js`
-- [ ] Instantiate all services and controllers
-- [ ] Mount middleware in order: security headers → JSON body parser → correlation ID → request logger → CORS → routes → 404 → error handler
-- [ ] Export `createApp(redis)` factory
+- [x] Instantiate all services and controllers
+- [x] Mount middleware in order: security headers → JSON body parser → correlation ID → request logger → CORS → routes → 404 → error handler
+- [x] Export `createApp(redis)` factory
 
 ### `src/server.js`
-- [ ] Create Redis client (with retry strategy)
-- [ ] Call `createApp(redis)`
-- [ ] `server.listen(port, host)`
-- [ ] Handle `SIGTERM` and `SIGINT` — close HTTP server, quit Redis, exit 0
-- [ ] Handle `uncaughtException` and `unhandledRejection` — log fatal, exit 1
+- [x] Create Redis client (with retry strategy)
+- [x] Call `createApp(redis)`
+- [x] `server.listen(port, host)`
+- [x] Handle `SIGTERM` and `SIGINT` — close HTTP server, quit Redis, exit 0
+- [x] Handle `uncaughtException` and `unhandledRejection` — log fatal, exit 1
 
 ---
 
