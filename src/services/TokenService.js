@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const { xchacha20poly1305 } = require('@noble/ciphers/chacha');
 const ed25519 = require('@noble/ed25519');
+const { sha512 } = require('@noble/hashes/sha512');
+ed25519.etc.sha512Sync = (...m) => sha512(ed25519.etc.concatBytes(...m));
 if (!globalThis.crypto) globalThis.crypto = crypto.webcrypto;
 const { ulid } = require('ulid');
 const { pae } = require('../utils/pae');
@@ -82,15 +84,15 @@ class TokenService {
       ? Buffer.from(options.implicitAssertion, 'utf8') 
       : Buffer.alloc(0);
 
-    const nonce = crypto.randomBytes(32); // 32 bytes for xchacha20
+    const nonce = crypto.randomBytes(24); // 24 bytes for xchacha20
     const header = Buffer.from('v4.local.', 'utf8');
 
     // PAE
     const aad = pae(header, nonce, footerBuf, iBuf);
 
     // @noble/ciphers requires Uint8Array inputs
-    const xc = xchacha20poly1305(new Uint8Array(keyBytes), new Uint8Array(nonce));
-    const ciphertext = xc.encrypt(new Uint8Array(m), new Uint8Array(aad));
+    const xc = xchacha20poly1305(new Uint8Array(keyBytes), new Uint8Array(nonce), new Uint8Array(aad));
+    const ciphertext = xc.encrypt(new Uint8Array(m));
 
     const payloadBase64 = Buffer.concat([nonce, Buffer.from(ciphertext)]).toString('base64url');
     const footerBase64 = footerBuf.toString('base64url');
@@ -116,8 +118,8 @@ class TokenService {
       throw new TokenInvalidError('Token payload too short');
     }
 
-    const nonce = payloadBuf.subarray(0, 32); 
-    const ciphertext = payloadBuf.subarray(32);
+    const nonce = payloadBuf.subarray(0, 24); 
+    const ciphertext = payloadBuf.subarray(24);
 
     const footerBuf = parts.length === 4 ? Buffer.from(parts[3], 'base64url') : Buffer.alloc(0);
     const assertionBuf = Buffer.from(options.implicitAssertion || '', 'utf8');
@@ -132,8 +134,8 @@ class TokenService {
     for (const keyRecord of candidateKeys) {
       if (keyRecord.purpose !== 'local') continue;
       try {
-        const xc = xchacha20poly1305(new Uint8Array(keyRecord.rawKey), new Uint8Array(nonce));
-        plaintext = xc.decrypt(new Uint8Array(ciphertext), new Uint8Array(aad));
+        const xc = xchacha20poly1305(new Uint8Array(keyRecord.rawKey), new Uint8Array(nonce), new Uint8Array(aad));
+        plaintext = xc.decrypt(new Uint8Array(ciphertext));
         macMatched = true;
         break; // Stop at first successful decrypt
       } catch (err) {

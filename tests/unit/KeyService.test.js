@@ -1,4 +1,6 @@
 const ed25519 = require('@noble/ed25519');
+const { sha512 } = require('@noble/hashes/sha512');
+ed25519.etc.sha512Sync = (...m) => sha512(ed25519.etc.concatBytes(...m));
 const Redis = require('ioredis');
 const crypto = require('crypto');
 if (!globalThis.crypto) globalThis.crypto = crypto.webcrypto;

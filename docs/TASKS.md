@@ -282,12 +282,12 @@ Each method takes `(req, res, next)`:
 
 ### Unit tests (`tests/unit/`)
 
-- [ ] `pae.test.js` — test against official PASETO spec test vectors:
+- [x] `pae.test.js` — test against official PASETO spec test vectors:
   - `PAE()` → `0x0000000000000000`
   - `PAE("")` → `0x0100000000000000 0x0000000000000000`
   - Multi-piece ambiguity prevention (splitting same bytes differently → different output)
 
-- [ ] `TokenService.test.js`:
+- [x] `TokenService.test.js`:
   - Encrypt/decrypt round trip (local)
   - Sign/verify round trip (public)
   - Payload is not readable as plaintext after encryption
@@ -301,7 +301,7 @@ Each method takes `(req, res, next)`:
   - Candidate key fallback (verify with retired key)
   - Different tokens produced for same claims (random nonce)
 
-- [ ] `RevocationService.test.js`:
+- [x] `RevocationService.test.js`:
   - Revoke + isRevoked round trip
   - Non-revoked JTI returns false
   - Family: create → register → consume (valid)
@@ -309,7 +309,7 @@ Each method takes `(req, res, next)`:
   - Family: replay after rotation revokes family
   - Explicit family revocation
 
-- [ ] `KeyService.test.js`:
+- [x] `KeyService.test.js`:
   - generateLocalKey returns correct ID format
   - getActiveKey returns 32-byte rawKey Buffer
   - Key material is AES-encrypted at rest (raw Redis value is not a plaintext key)
