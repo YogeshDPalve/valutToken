@@ -253,28 +253,28 @@ Each method takes `(req, res, next)`:
 ## Phase 7 — CLI Scripts
 
 ### `scripts/keygen.js`
-- [ ] Parse `--type`, `--tenant`, `--show-public` flags with yargs
-- [ ] Connect to Redis, call `KeyService.generateLocalKey` and/or `generatePublicKey`
-- [ ] Print key IDs and metadata, disconnect
+- [x] Parse `--type`, `--tenant`, `--show-public` flags with yargs
+- [x] Connect to Redis, call `KeyService.generateLocalKey` and/or `generatePublicKey`
+- [x] Print key IDs and metadata, disconnect
 
 ### `scripts/rotate.js`
-- [ ] Parse `--type`, `--tenant`, `--grace`, `--yes` flags
-- [ ] If production and not `--yes`, prompt for confirmation
-- [ ] Call `KeyService.rotateKey`, print before/after
+- [x] Parse `--type`, `--tenant`, `--grace`, `--yes` flags
+- [x] If production and not `--yes`, prompt for confirmation
+- [x] Call `KeyService.rotateKey`, print before/after
 
 ### `scripts/revoke.js`
-- [ ] Parse `--jti`, `--sub`, `--family`, `--key`, `--tenant`, `--reason` flags
-- [ ] Call the appropriate `RevocationService` method
+- [x] Parse `--jti`, `--sub`, `--family`, `--key`, `--tenant`, `--reason` flags
+- [x] Call the appropriate `RevocationService` method
 
 ### `scripts/keys-list.js`
-- [ ] Parse `--tenant` flag
-- [ ] Call `KeyService.listKeys` and `getPublicKeys`
-- [ ] Print colored table of active, retired, and public keys
+- [x] Parse `--tenant` flag
+- [x] Call `KeyService.listKeys` and `getPublicKeys`
+- [x] Print colored table of active, retired, and public keys
 
 ### `scripts/audit-tail.js`
-- [ ] Parse `--tenant`, `--event`, `--limit` flags
-- [ ] Call `AuditService.query` with filters
-- [ ] Print colored log lines
+- [x] Parse `--tenant`, `--event`, `--limit` flags
+- [x] Call `AuditService.query` with filters
+- [x] Print colored log lines
 
 ---
 
